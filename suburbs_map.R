@@ -1,5 +1,7 @@
 library(sf)
 library(tidyverse)
+library(RColorBrewer)
+library(ggplot2)
 
 ### Data Set
 #####################################################################
@@ -29,18 +31,33 @@ plot(Brisbane[,3])
 #plot(st_centroid(Brisbane[1], of_largest_polygon = TRUE))
 
 
-
 ####################################
 
 #need to work on this part
 
-Brisbane_dogs <- full_join(suburb_dogs,Brisbane)
+Brisbane_dogs <- full_join(Brisbane, suburb_dogs)
+
+plot(Brisbane_dogs)
+
+plot(Brisbane_dogs['total_dogs'])
+plot(Brisbane_dogs['Labrador Retriever'])
+plot(Brisbane_dogs['Maltese'])
+plot(Brisbane_dogs['Staffordshire Bull Terrier'])
+
+
+
+
+
 
 Brisbane_dogs[is.na(Brisbane_dogs)] <- 0
 
-plot(Brisbane_dogs$total_dogs)
+#plot(Brisbane_dogs$total_dogs)
 
-plot(Brisbane_dogs[,2])
+#plot(Brisbane_dogs[,2])
+
+plot(Brisbane_dogs)
+
+
 
 
 
