@@ -55,12 +55,14 @@ top_breeds <- dog_rego %>%
 
 top_breedslist <- top_breeds$breed
 
-# dog registrations by breed and suburb
-dog_rego %>%
+# dog registrations by breed and suburb- breeds into columns
+suburb_breeds <- dog_rego %>%
+  filter(!is.na(suburb) & !is.na(breed)) %>%
   group_by(suburb, breed) %>%
   summarise(
     n = n()
-  )
+  ) %>%
+  spread(breed, n, fill = 0, convert = FALSE)
 
 levels(dog_rego$breed)
 
