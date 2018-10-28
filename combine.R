@@ -2,7 +2,11 @@
 
 #need to work on this part
 
-Brisbane_dogs <- full_join(Brisbane, suburb_breeds_dogs, by = "suburb")
+Brisbane_dogs <- full_join(Brisbane, suburb_breeds, by = "suburb") %>%
+  mutate(`dog density` = total/CA_AREA_SQ) 
+
+
+
 
 plot(Brisbane_dogs)
 
@@ -57,7 +61,7 @@ ggplot(data = Brisbane_dogs) +
 
 
 ggplot(data = Brisbane_dogs) +
-  geom_sf(aes(fill = `Total Dogs`)) + 
+  geom_sf(aes(fill = total)) + 
   scale_fill_gradient(low = "blue", high = "red", na.value = "grey90") +
   xlab("Longitude") + ylab("Latitude") +
   ggtitle("Brisbane map", subtitle = paste0("(", length(unique(Brisbane_dogs$suburb)), " localities)"))
@@ -68,6 +72,35 @@ ggplot(data = Brisbane_dogs) +
   scale_fill_gradient(low = "blue", high = "red", na.value = "grey90") +
   xlab("Longitude") + ylab("Latitude") +
   ggtitle("Brisbane map", subtitle = paste0("(", length(unique(Brisbane_dogs$suburb)), " localities)"))
+
+
+ggplot(data = Brisbane_dogs) +
+  geom_sf(aes(fill = `Labrador Retriever`)) + 
+  scale_fill_gradient(low = "blue", high = "red", na.value = "grey90") +
+  xlab("Longitude") + ylab("Latitude") +
+  ggtitle("Brisbane map", subtitle = paste0("(", length(unique(Brisbane_dogs$suburb)), " localities)"))
+
+ggplot(data = Brisbane_dogs) +
+  geom_sf(aes(fill = `Greyhound`)) + 
+  scale_fill_gradient(low = "blue", high = "red", na.value = "grey90") +
+  xlab("Longitude") + ylab("Latitude") +
+  ggtitle("Brisbane map", subtitle = paste0("(", length(unique(Brisbane_dogs$suburb)), " localities)"))
+
+ggplot(data = Brisbane_dogs) +
+  geom_sf(aes(fill = `dog density`)) + 
+  scale_fill_gradient(low = "blue", high = "red", na.value = "grey90") +
+  xlab("Longitude") + ylab("Latitude") +
+  ggtitle("Brisbane map", subtitle = paste0("(", length(unique(Brisbane_dogs$suburb)), " localities)"))
+
+
+#1 Labrador Retriever          9394
+#2 Maltese                     8450
+#3 Staffordshire Bull Terrier  6919
+# plus pugs and greyhounds
+#fancy code to make slicers and zoom?
+
+# types of permits
+levels(dog_rego$breed)
 
 
 no_dogs <- filter(Brisbane_dogs, is.na(`Total Dogs`))
