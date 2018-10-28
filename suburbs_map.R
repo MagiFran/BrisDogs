@@ -1,5 +1,6 @@
 library(sf)
 library(tidyverse)
+library(ggplot2)
 #library(RColorBrewer)
 #library(ggplot2)
 
@@ -32,3 +33,16 @@ plot(st_centroid(Brisbane[1], of_largest_polygon = TRUE))
 #par(new=TRUE)
 #plot(Brisbane[,3], col = "grey", main = FALSE)
 
+ggplot(data = Brisbane) +
+  geom_sf()
+
+theme_set(theme_bw())
+ggplot(data = Brisbane) +
+  geom_sf() +
+  xlab("Longitude") + ylab("Latitude") +
+  ggtitle("Brisbane map", subtitle = paste0("(", length(unique(Brisbane$suburb)), " localities)"))
+
+ggplot(data = Brisbane) +
+  geom_sf(color = "black", fill = "lightgreen") +
+  xlab("Longitude") + ylab("Latitude") +
+  ggtitle("Brisbane map", subtitle = paste0("(", length(unique(Brisbane$suburb)), " localities)"))

@@ -2,7 +2,7 @@
 
 #need to work on this part
 
-Brisbane_dogs <- full_join(Brisbane, suburb_breeds_dogs)
+Brisbane_dogs <- full_join(Brisbane, suburb_breeds_dogs, by = "suburb")
 
 plot(Brisbane_dogs)
 
@@ -39,7 +39,35 @@ Brisbane_dogs[is.na(Brisbane_dogs)] <- 0
 
 plot(Brisbane_dogs)
 
+###########################
+
+theme_set(theme_bw())
+ggplot(data = Brisbane_dogs) +
+  geom_sf() +
+  xlab("Longitude") + ylab("Latitude") +
+  ggtitle("Brisbane map", subtitle = paste0("(", length(unique(Brisbane_dogs$suburb)), " localities)"))
 
 
 
+ggplot(data = Brisbane_dogs) +
+  geom_sf(aes(fill = `Total Dogs`)) + 
+  #scale_colour_gradient(low = "white", high = "black") +
+  xlab("Longitude") + ylab("Latitude") +
+  ggtitle("Brisbane map", subtitle = paste0("(", length(unique(Brisbane_dogs$suburb)), " localities)"))
 
+
+ggplot(data = Brisbane_dogs) +
+  geom_sf(aes(fill = `Total Dogs`)) + 
+  scale_fill_gradient(low = "blue", high = "red", na.value = "grey90") +
+  xlab("Longitude") + ylab("Latitude") +
+  ggtitle("Brisbane map", subtitle = paste0("(", length(unique(Brisbane_dogs$suburb)), " localities)"))
+
+
+ggplot(data = Brisbane_dogs) +
+  geom_sf(aes(fill = `Cavalier King Charles Spaniel`)) + 
+  scale_fill_gradient(low = "blue", high = "red", na.value = "grey90") +
+  xlab("Longitude") + ylab("Latitude") +
+  ggtitle("Brisbane map", subtitle = paste0("(", length(unique(Brisbane_dogs$suburb)), " localities)"))
+
+
+no_dogs <- filter(Brisbane_dogs, is.na(`Total Dogs`))

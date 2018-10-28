@@ -9,6 +9,46 @@ animal_permits <- fread("https://www.data.brisbane.qld.gov.au/data/dataset/b5ff5
 # Fix Names
 names(animal_permits) <- c("group", "type", "status", "breed", "suburb")
 
+# breed is only relevent to dog registration.
+# there are only 7 dog registration records with breed missing
+
+dog_rego <- animal_permits[type == "Dog Registration"]
+
+
+
+# dog registrations by breed and suburb- breeds into columns
+# start with dog_rego and write to new df
+# remove records where breed or suburb is na
+# sumarise by suburb and breed as a percentage of dog pop for suburb
+
+
+suburb_breeds <- dog_rego %>%
+  filter(!is.na(suburb) & !is.na(breed)) %>%
+  group_by(suburb, breed) %>%
+  summarise(
+    n = n()
+  ) %>%
+  group_by(suburb) %>%
+  mutate(total = sum(n)) %>%
+  mutate(pct = n/total*100) %>%
+  select(-n) %>%
+  spread(breed, pct, fill = NA, convert = FALSE, drop = TRUE, sep = NULL )
+
+
+
+
+##############################################################
+# Data Exploration working
+
+# dog registrations by suburb
+suburb_dogs <- dog_rego %>%
+  filter(!is.na(suburb)) %>%
+  group_by(suburb) %>%
+  summarise(
+    'Total Dogs' = n()
+  )
+
+
 # types of permits
 levels(animal_permits$type)
 
@@ -21,7 +61,7 @@ animal_permits %>%
   )
 
 # look at Guard Dog Permits
-# animal_permits[type == "Guard Dog Permit"]
+animal_permits[type == "Guard Dog Permit"]
 
 
 # check for na breed records
@@ -32,18 +72,7 @@ animal_permits[is.na(breed)] %>%
     n = n()
   )
 
-# breed is only relevent to dog registration.
-# there are only 7 dog registration records with breed missing
 
-dog_rego <- animal_permits[type == "Dog Registration"]
-
-# dog registrations by suburb
-suburb_dogs <- dog_rego %>%
-  filter(!is.na(suburb)) %>%
-  group_by(suburb) %>%
-  summarise(
-    'Total Dogs' = n()
-  )
 
 # Top dog breeds
 top_breeds <- dog_rego %>%
@@ -53,20 +82,17 @@ top_breeds <- dog_rego %>%
   ) %>%
   top_n(3)
 
-top_breedslist <- top_breeds$breed
-
-# dog registrations by breed and suburb- breeds into columns
-# start with dog_rego and right to new df
-suburb_breeds <- dog_rego %>%
-  # remove records where breed or suburb is na
-  filter(!is.na(suburb) & !is.na(breed)) %>%
-  # sumarise by suburb and breed
-  group_by(suburb, breed) %>%
+dog_rego %>%
+  group_by(breed) %>%
   summarise(
     n = n()
   ) %>%
-  # turn the breeds into columns
-  spread(breed, n, fill = 0, convert = FALSE) 
+  top_n(10)
+
+
+top_breedslist <- top_breeds$breed
+
+
 
 suburb_breeds_dogs <- full_join(suburb_breeds, suburb_dogs, by = "suburb")
 
