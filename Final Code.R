@@ -1,7 +1,7 @@
 library(data.table)
 library(tidyverse)
 library(sf)
-library(tidyverse)
+
 library(ggplot2)
 
 
@@ -66,11 +66,13 @@ Brisbane <- cbind(suburb=toupper(Brisbane$LOCALITY),Brisbane[,2:5])
 Brisbane_dogs <- full_join(Brisbane, suburb_breeds, by = "suburb") %>%
   mutate(`dog density` = total/CA_AREA_SQ) 
 
+theme_set(theme_minimal())
 ggplot(data = Brisbane_dogs) +
   geom_sf(aes(fill = `dog density`)) + 
   scale_fill_gradient(low = "blue", high = "red", na.value = "grey90") +
-  xlab("Longitude") + ylab("Latitude") +
-  ggtitle("Brisbane map", subtitle = paste0("(", length(unique(Brisbane_dogs$suburb)), " localities)"))
+  xlab("Longitude") + ylab("Latitude") +  
+  ggtitle("Brisbane map", subtitle = paste0("(", length(unique(Brisbane_dogs$suburb)), " localities)")) 
+
 
 
 
