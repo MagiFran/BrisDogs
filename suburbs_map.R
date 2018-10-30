@@ -1,6 +1,7 @@
 library(sf)
 library(tidyverse)
 library(ggplot2)
+library(tmap)
 #library(RColorBrewer)
 #library(ggplot2)
 
@@ -46,3 +47,24 @@ ggplot(data = Brisbane) +
   geom_sf(color = "black", fill = "lightgreen") +
   xlab("Longitude") + ylab("Latitude") +
   ggtitle("Brisbane map", subtitle = paste0("(", length(unique(Brisbane$suburb)), " localities)"))
+
+
+
+#tmap
+tm_shape(Brisbane) +
+  tm_fill()
+
+tm_shape(Brisbane) +
+  tm_borders()
+
+tm_shape(Brisbane) +
+  tm_borders() +
+  tm_fill("whitesmoke") 
+#  tm_scale_bar() # +
+#  tm_compass()
+
+tm_shape(Brisbane) +
+  tm_polygons(c("whitesmoke", "blue"))
+
+
+
