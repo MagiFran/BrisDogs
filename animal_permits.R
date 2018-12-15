@@ -10,17 +10,17 @@ animal_permits <- fread("https://www.data.brisbane.qld.gov.au/data/dataset/b5ff5
 names(animal_permits) <- c("group", "type", "status", "breed", "suburb")
 
 # breed is only relevent to dog registration.
-# there are only 7 dog registration records with breed missing
+# there are only 7 dog registration records with breed missing other records have "Unknown"
 
 dog_rego <- animal_permits[type == "Dog Registration"]
 
-
-
+dog_rego[is.na(dog_rego$breed)] <- "Unknown"
+  
 # dog registrations by breed and suburb- breeds into columns
 # start with dog_rego and write to new df
-# remove records where breed or suburb is na
+# remove records where suburb is na
 # sumarise by suburb and breed as a percentage of dog pop for suburb
-
+# wide data set
 
 suburb_breeds <- dog_rego %>%
   filter(!is.na(suburb) & !is.na(breed)) %>%
@@ -34,19 +34,29 @@ suburb_breeds <- dog_rego %>%
   select(-n) %>%
   spread(breed, pct, fill = NA, convert = FALSE, drop = TRUE, sep = NULL )
 
-
-
-
-##############################################################
-# Data Exploration working
-
 # dog registrations by suburb
-suburb_dogs <- dog_rego %>%
+suburb_dogs_cnt <- dog_rego %>%
   filter(!is.na(suburb)) %>%
   group_by(suburb) %>%
   summarise(
     'Total Dogs' = n()
   )
+
+# dog rego by breed and suburb - long form
+suburb_dogbreeds_cnt <- dog_rego %>%
+  filter(!is.na(suburb) & !is.na(breed)) %>%
+  group_by(suburb, breed) %>%
+  summarise(
+    n = n()
+  )
+
+
+##############################################################
+# Data Exploration working
+
+dog_rego[is.na(dog_rego$suburb)]
+
+
 
 
 # types of permits
@@ -75,13 +85,6 @@ animal_permits[is.na(breed)] %>%
 
 
 # Top dog breeds
-top_breeds <- dog_rego %>%
-  group_by(breed) %>%
-  summarise(
-    n = n()
-  ) %>%
-  top_n(3)
-
 dog_rego %>%
   group_by(breed) %>%
   summarise(
@@ -90,11 +93,10 @@ dog_rego %>%
   top_n(10)
 
 
-top_breedslist <- top_breeds$breed
 
 
 
-suburb_breeds_dogs <- full_join(suburb_breeds, suburb_dogs, by = "suburb")
+#suburb_breeds_dogs <- full_join(suburb_breeds, suburb_dogs, by = "suburb")
 
   ## put totals on the end
   ## calculate dog breed as percentage of total
@@ -103,13 +105,14 @@ levels(dog_rego$breed)
 
 #write.csv(dog_rego, "D:/R_Output/Brisbane_Dogs/dog_rego.")
 
-suburb_dogs_topbreeds <- dog_rego %>%
-  filter(breed %in% top_breedslist) %>%
-  filter(!is.na(suburb)) %>%
-  group_by(suburb, breed) %>%
-  summarise(
-    n = n()
-  ) %>%
-  spread(breed, n)
-
-suburb_dogs <- full_join(suburb_dogs, suburb_dogs_topbreeds, by = "suburb")
+#suburb_dogs_topbreeds <- dog_rego %>%
+#  filter(breed %in% top_breedslist) %>%
+#  filter(!is.na(suburb)) %>%
+#  group_by(suburb, breed) %>%
+#  summarise(
+#    n = n()
+#  ) %>%
+#  spread(breed, n)
+#
+#suburb_dogs <- full_join(suburb_dogs, suburb_dogs_topbreeds, by = "suburb")
+#

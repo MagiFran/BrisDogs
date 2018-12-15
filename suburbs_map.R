@@ -37,6 +37,9 @@ plot(st_centroid(Brisbane[1], of_largest_polygon = TRUE))
 ggplot(data = Brisbane) +
   geom_sf()
 
+
+plotly(Brisbane$geometry)
+
 theme_set(theme_bw())
 ggplot(data = Brisbane) +
   geom_sf() +
