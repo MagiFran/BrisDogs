@@ -10,12 +10,10 @@ Brisbane_dogs <- full_join(Brisbane, suburb_breeds, by = "suburb") %>%
 
 plot(Brisbane_dogs)
 
-plot(Brisbane_dogs['Total Dogs'])
+plot(Brisbane_dogs['total'])
 plot(Brisbane_dogs['Labrador Retriever'])
 plot(Brisbane_dogs['Maltese'])
 plot(Brisbane_dogs['Staffordshire Bull Terrier'])
-
-
 plot(Brisbane_dogs['Siberian Husky'])
 plot(Brisbane_dogs['German Shepherd Dog'])
 plot(Brisbane_dogs['Bull Arab'])
@@ -23,25 +21,25 @@ plot(Brisbane_dogs['Bull Arab'])
 
 
 
-filter(Brisbane_dogs, 'Siberian Husky' > 30)
-
-##calculate dog density per suburb
-
-Brisbane %>% 
-  filter(suburb == "ALDERLEY")%>% 
-  st_area()
-
-
-
+#filter(Brisbane_dogs, 'Siberian Husky' > 30)
+#
+###calculate dog density per suburb
+#
+#Brisbane %>% 
+#  filter(suburb == "ALDERLEY")%>% 
+#  st_area()
+#
 
 
-Brisbane_dogs[is.na(Brisbane_dogs)] <- 0
 
-#plot(Brisbane_dogs$total_dogs)
 
-#plot(Brisbane_dogs[,2])
+##Brisbane_dogs[is.na(Brisbane_dogs)] <- 0
 
-plot(Brisbane_dogs)
+#plot(Brisbane_dogs$total)
+#
+#plot(Brisbane_dogs[,6])
+#
+#plot(Brisbane_dogs)
 
 ###########################
 
@@ -51,13 +49,6 @@ ggplot(data = Brisbane_dogs) +
   xlab("Longitude") + ylab("Latitude") +
   ggtitle("Brisbane map", subtitle = paste0("(", length(unique(Brisbane_dogs$suburb)), " localities)"))
 
-
-
-ggplot(data = Brisbane_dogs) +
-  geom_sf(aes(fill = `Total Dogs`)) + 
-  #scale_colour_gradient(low = "white", high = "black") +
-  xlab("Longitude") + ylab("Latitude") +
-  ggtitle("Brisbane map", subtitle = paste0("(", length(unique(Brisbane_dogs$suburb)), " localities)"))
 
 
 ggplot(data = Brisbane_dogs) +
@@ -75,7 +66,7 @@ ggplot(data = Brisbane_dogs) +
 
 
 ggplot(data = Brisbane_dogs) +
-  geom_sf(aes(fill = `Labrador Retriever`)) + 
+  geom_sf(aes(fill = `Beagle`)) + 
   scale_fill_gradient(low = "blue", high = "red", na.value = "grey90") +
   xlab("Longitude") + ylab("Latitude") +
   ggtitle("Brisbane map", subtitle = paste0("(", length(unique(Brisbane_dogs$suburb)), " localities)"))
@@ -103,4 +94,6 @@ ggplot(data = Brisbane_dogs) +
 levels(dog_rego$breed)
 
 
-no_dogs <- filter(Brisbane_dogs, is.na(`Total Dogs`))
+no_dogs <- filter(Brisbane_dogs, is.na(`total`))
+
+no_dogs$suburb

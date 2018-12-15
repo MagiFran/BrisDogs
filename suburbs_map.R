@@ -19,7 +19,7 @@ library(tmap)
 ###    Relationship to related resource: source                   ###
 #####################################################################
 
-Queensland <- st_read("D:/R_Input/Spatial_Files/QSC_Extracted_Data_20181021_185250899000-14996/Locality_Boundaries.shp")
+Queensland <- st_read("D:/Data_Input/Spatial_Files/QSC_Extracted_Data_20181021_185250899000-14996/Locality_Boundaries.shp")
 
 #filter for brsibane local government area
 Brisbane <- Queensland[,4:8] %>% filter(LGA == "Brisbane City") 
