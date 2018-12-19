@@ -24,6 +24,111 @@ plot_ly(mtcars, x = mtcars$wt, y = mpg, mode = "markers",
 
 
 
+###############################
+ibrary(plotly)
+
+p <- plot_ly(
+  type = 'scatter',
+  x = mtcars$hp,
+  y = mtcars$qsec,
+  text = rownames(mtcars),
+  hoverinfo = 'text',
+  mode = 'markers',
+  transforms = list(
+    list(
+      type = 'filter',
+      target = 'y',
+      operation = '>',
+      value = mean(mtcars$qsec)
+    )
+  )
+)
+
+# Create a shareable link to your chart
+# Set up API credentials: https://plot.ly/r/getting-started
+chart_link <- api_create(p, filename = "filter-basic")
+chart_link
+
+
+########################
+
+
+
+
+
+dog_rego[breed == "Shih Tzu"]
+
+p1 <- dog_rego %>%
+  filter(!is.na(suburb)) %>%
+  group_by(suburb) %>%
+  summarise(
+    n = n()
+  ) %>%
+  arrange(n)%>%
+  plot_ly( y = ~suburb, x = ~n, type = "bar", orientation = 'h'
+           )
+
+p2 <- dog_rego %>%
+  filter(!is.na(suburb)) %>%
+  group_by(breed) %>%
+  summarise(
+    n = n()
+  ) %>%
+  arrange(n)%>%
+  plot_ly( y = ~breed, x = ~n, type = "bar", orientation = 'h'
+  )
+
+subplot(p1, p2)
+
+l <- as.list(levels(dog_rego$breed))
+
+###plotly aggregation
+plot_ly(dog_rego,
+  type = 'scatter',
+  x = ~breed,
+  #split = ~suburb,
+  mode = 'markers',
+  transforms = list(
+    list(
+      type = 'aggregate',
+      groups = ~breed,
+      aggregations = list(
+        list(
+          target = 'y', func = 'count', enabled = T
+        )
+      )
+    )
+  )
+)
+
+
+
+
+split = ~suburb
+### doesn't work
+plot_ly(dog_rego,
+        type = 'bar',
+        orientation = 'v',
+        legendgroup = l,
+        showlegend = TRUE,
+        x = ~suburb,
+        mode = 'markers',
+        transforms = list(
+          list(
+            type = 'aggregate',
+            groups = ~suburb,
+            aggregations = list(
+              list(
+                target = 'y', func = 'count', enabled = T
+              )
+            )
+          )
+        )
+)
+
+
+
+
 ### Start here
 
 library(plotly)
