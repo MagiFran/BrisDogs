@@ -2,6 +2,10 @@ library(plotly)
 library(sf)
 
 
+library(plotly)
+plot_ly(z = ~volcano)
+
+
 mtcars<- mtcars
 plot_ly(mtcars, x = mtcars$wt, y = mpg, z = mtcars$disp,
         mode = "markers", type = "scatter3d") #, 
@@ -24,8 +28,18 @@ plot_ly(mtcars, x = mtcars$wt, y = mpg, mode = "markers",
 
 
 
+# more dplyr verbs applied to plotly objects
+p <- mtcars %>%
+  plot_ly(x = ~wt, y = ~mpg, name = "scatter trace") %>%
+  add_markers()
+p %>% slice(1) %>% plotly_data()
+p %>% slice(1) %>% add_markers(name = "first observation")
+p %>% filter(cyl == 4) %>% plotly_data()
+p %>% filter(cyl == 4) %>% add_markers(name = "four cylinders")
+
+
 ###############################
-ibrary(plotly)
+library(plotly)
 
 p <- plot_ly(
   type = 'scatter',
@@ -105,14 +119,12 @@ plot_ly(dog_rego,
 
 
 split = ~suburb
-### doesn't work
+### 
 plot_ly(dog_rego,
-        type = 'bar',
-        orientation = 'v',
-        legendgroup = l,
-        showlegend = TRUE,
+        type = 'scatter',
+        mode = 'markers',      
         x = ~suburb,
-        mode = 'markers',
+
         transforms = list(
           list(
             type = 'aggregate',
@@ -133,14 +145,15 @@ plot_ly(dog_rego,
 
 library(plotly)
 
+
 plot_ly(Brisbane, type = "scatter", mode = "lines",
         showlegend = FALSE,
         color = I("#EBEBEB"),
         stroke = I("#7E7E7E")
         )
 
-plot_ly(suburb_dogs_cnt, x = suburb_dogs_cnt$suburb, 
-        y = suburb_dogs_cnt$`Total Dogs`,
+plot_ly(suburb_dogbreeds_cnt, x = ~suburb, 
+        y = ~n,
         type = "bar")
 
 
@@ -170,10 +183,181 @@ plot_ly(
   type = "scatter",
   mode = "lines",
   stroke = I("#7E7E7E")
+)%>%
+  filter(suburb != 'MORETON BAY')
+
+
+
+plot_ly(Brisbane, type = "scatter", mode = "lines",
+        showlegend = FALSE,
+        color = I("#EBEBEB"),
+        stroke = I("#7E7E7E")
 )
 
 
 
+####################Working Map################
+plot_ly(
+  Brisbane, 
+  split = ~suburb,
+  alpha = 1,
+  showlegend = FALSE,
+  type = "scatter",
+  mode = "lines",
+  color = I("#EBEBEB"),
+  stroke = I("#7E7E7E")
+)%>%
+  filter(suburb != 'MORETON BAY')
+ 
+#demo(package = "plotly") 
+#sf-dt                         Linked querying of simple features with DT (datatables)
+#sf-geo                        Mapping sf objects with scattergeo
+#sf-ggplot2                    Mapping sf objects via ggplot2 and geom_sf()
+#sf-mapbox-data                Mapping sf objects with mapbox
+#sf-mapbox-layout              Mapping sf objects with mapbox (as a layer)
+#sf-mapbox-style               Including a dropdown for mapbox's basemap style
+#sf-plotly-3D-globe            Exploring storms paths by linking a 3D globe with a 2D
+#                              summary
+#sf-plotly-storms              Linking multiple 2D views of 3D storm paths
+
+
+plot_mapbox(Brisbane)
+
+
+
+plot_ly(color = I("#EBEBEB"), stroke = I("#7E7E7E"))%>%
+  add_data(Brisbane['suburb'])%>%
+  filter(suburb != 'MORETON BAY')%>%
+  add_trace(suburb_dogbreeds_cnt
+          
+          
+          
+          
+          ,
+          x = ~suburb,
+          y = ~n,
+          type = "scatter",
+          mode = "markers",
+          transforms = list(
+            list(
+              type = 'aggregate',
+              groups = ~suburb, #~breed,
+              aggregations = list(
+                list(
+                  target = 'y', func = 'sum', enabled = TRUE
+                )
+              )
+            )
+          )
+  )
+
+
+
+
+%>%
+  add_lines(color = I("#EBEBEB"))
+
+  add_data(suburb_dogbreeds_cnt)%>%
+  add_trace()
+
+
+#################Working Summary
+
+plot_ly(suburb_dogbreeds_cnt,
+        x = ~suburb,
+        y = ~n,
+        type = "scatter",
+        mode = "markers",
+        transforms = list(
+          list(
+            type = 'aggregate',
+            groups = ~suburb, #~breed,
+            aggregations = list(
+              list(
+                target = 'y', func = 'sum', enabled = TRUE
+              )
+            )
+          )
+        )
+)
+
+
+
+
+
+
+plot_ly(suburb_dogbreeds_cnt,
+        #split = ~suburb,
+        x = ~breed,
+        y= ~n,
+        type = "scatter",
+        mode = "markers",
+        transforms = list(
+          list(
+            type = 'aggregate',
+            groups = ~breed,
+            aggregations = list(
+              list(
+                target = 'y', func = 'sum', enabled = TRUE
+              )
+            )
+          )
+        )
+        )
+
+
+%>%
+  layout(
+    title = 'Number of dogs in BrisVegas',
+    xaxis = list(title = 'Suburb'),
+    yaxis = list(title = 'Number of Dogs'),
+    updatemenus = list(
+      list(
+        x = 0.25,
+        y = 1.04,
+        xref = 'paper',
+        yref = 'paper',
+        yanchor = 'top',
+        buttons = l
+      )
+    )
+  )
+
+
+
+
+
+
+
+trans
+
+all_suburbs%>%
+  add_data(dog_rego,
+
+           aggregations = list(
+             list(
+               target = 'y', func = 'count', enabled = T
+             ))
+  )
+
+
+
+
+      
+plot_ly(suburb_dogbreeds_cnt,
+        type = "scatter",
+        mode = "markers",
+        x = ~breed,
+        y = ~n,
+        color = n,
+        aggregations = list(
+          list(
+            target = 'y', func = 'sum', enabled = T
+             )
+          )
+        )     
+      
+      
 ###Franconia
 
 

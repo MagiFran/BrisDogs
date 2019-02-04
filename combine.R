@@ -17,7 +17,7 @@ plot(Brisbane_dogs['Staffordshire Bull Terrier'])
 plot(Brisbane_dogs['Siberian Husky'])
 plot(Brisbane_dogs['German Shepherd Dog'])
 plot(Brisbane_dogs['Bull Arab'])
-
+plot(Brisbane_dogs['Beagle'])
 
 
 

@@ -16,11 +16,14 @@ names(animal_permits) <- c("group", "type", "status", "breed", "suburb")
 
 dog_rego <- animal_permits[type == "Dog Registration"]
 
+dog_rego[is.na(dog_rego$breed)] <- "Unknown"
+
+
 # dog registrations by breed and suburb- breeds into columns
 # start with dog_rego and write to new df
-# remove records where breed or suburb is na
+# remove records where suburb is na
 # sumarise by suburb and breed as a percentage of dog pop for suburb
-
+# wide data set
 
 suburb_breeds <- dog_rego %>%
   filter(!is.na(suburb) & !is.na(breed)) %>%
